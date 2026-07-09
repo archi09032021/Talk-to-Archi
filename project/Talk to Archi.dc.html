@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#131210;color:#ece7dd;font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#ece7dd}a:hover{color:#ffffff}
+::selection{background:rgba(236,231,221,.22)}
+input::placeholder{color:#6f695f}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-thumb{background:rgba(236,231,221,.14);border-radius:5px}
+::-webkit-scrollbar-track{background:transparent}
+@keyframes ttaFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ttaBlink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes ttaPulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+</style>
+</helmet>
+<div style="height:100vh;display:flex;flex-direction:column;background:#131210;color:#ece7dd;font-family:'Hanken Grotesk',system-ui,sans-serif;overflow:hidden">
+
+<sc-if value="{{ showLanding }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Landing" style="flex:1;display:flex;flex-direction:column;padding:40px 24px;overflow-y:auto;transition:opacity .5s ease,transform .5s ease;opacity:{{ landingOpacity }};transform:translateY({{ landingShift }}px)">
+  <div style="width:100%;max-width:640px;display:flex;flex-direction:column;margin:auto">
+    <h1 style="margin:0 0 30px;font-size:56px;font-weight:300;line-height:1.12;letter-spacing:-0.015em;color:#f2eee5;animation:ttaFadeUp .7s ease both">Hello.<br>I'm Archishman.</h1>
+    <p style="margin:0 0 8px;font-size:19px;line-height:1.7;color:#b6afa2;animation:ttaFadeUp .7s ease .12s both">Most people send resumes. I thought I'd send <em style="font-family:'Newsreader',serif;font-style:italic;color:#ece7dd;font-size:21px">myself</em>.</p>
+    <p style="margin:0 0 40px;font-size:19px;line-height:1.7;color:#b6afa2;animation:ttaFadeUp .7s ease .2s both">I've been trained on everything I've built, written, designed and learned. Instead of reading a PDF&nbsp;— ask me anything.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px;animation:ttaFadeUp .7s ease .3s both">
+      <sc-for list="{{ prompts }}" as="p" hint-placeholder-count="6">
+        <button onClick="{{ p.ask }}" style="background:none;border:1px solid rgba(236,231,221,.16);border-radius:999px;padding:9px 15px;color:#c9c2b4;font-size:13.5px;cursor:pointer;font-family:inherit;line-height:1.3;transition:border-color .18s,color .18s" style-hover="border-color:rgba(236,231,221,.4);color:#ece7dd">{{ p.label }}</button>
+      </sc-for>
+    </div>
+    <div style="position:relative;width:100%;animation:ttaFadeUp .7s ease .4s both">
+      <input value="{{ inputVal }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="Ask Archi anything..." autoFocus="{{ true }}" style="width:100%;background:#1c1a17;border:1px solid rgba(236,231,221,.14);border-radius:16px;padding:17px 60px 17px 20px;font-size:15.5px;color:#ece7dd;outline:none;transition:border-color .18s" style-focus="border-color:rgba(236,231,221,.34)">
+      <button onClick="{{ sendClick }}" aria-label="Send" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:#ece7dd;color:#131210;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#ffffff">↑</button>
+    </div>
+    <p style="margin:18px 2px 0;font-size:12.5px;color:#6f695f;animation:ttaFadeUp .7s ease .5s both">Try <span style="font-family:ui-monospace,Menlo,monospace">/theatre</span>, <span style="font-family:ui-monospace,Menlo,monospace">/music</span>, <span style="font-family:ui-monospace,Menlo,monospace">/timeline</span>, <span style="font-family:ui-monospace,Menlo,monospace">/why-openai</span> — or <span style="font-family:ui-monospace,Menlo,monospace">/resume</span> if you really want the PDF.</p>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showChat }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Chat" style="flex:1;display:flex;flex-direction:column;min-height:0;animation:ttaFadeUp .5s ease both">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 24px;border-bottom:1px solid rgba(236,231,221,.09)">
+    <div style="display:flex;align-items:baseline;gap:10px">
+      <div style="font-size:14.5px;font-weight:500;color:#f2eee5">Archishman Choudhury</div>
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8478">digital twin</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onClick="{{ toggleInterview }}" style="display:flex;align-items:center;gap:7px;background:none;border:1px solid rgba(236,231,221,.16);border-radius:999px;padding:7px 13px;color:#c9c2b4;font-size:12.5px;cursor:pointer;font-family:inherit;transition:border-color .18s" style-hover="border-color:rgba(236,231,221,.4)"><span style="width:7px;height:7px;border-radius:50%;background:{{ interviewDot }};transition:background .18s"></span>{{ interviewLabel }}</button>
+      <button onClick="{{ recruiter }}" style="background:#ece7dd;color:#131210;border:none;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit" style-hover="background:#ffffff">Should we interview Archi?</button>
+      <button onClick="{{ newChat }}" style="background:none;border:1px solid rgba(236,231,221,.16);border-radius:999px;padding:7px 13px;color:#c9c2b4;font-size:12.5px;cursor:pointer;font-family:inherit;transition:border-color .18s" style-hover="border-color:rgba(236,231,221,.4)">New chat</button>
+    </div>
+  </div>
+  <div ref="{{ setScroll }}" style="flex:1;overflow-y:auto;padding:28px 24px 8px;min-height:0">
+    <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column">
+      <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;width:100%">
+          <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-end;max-width:78%;background:rgba(236,231,221,.09);border:1px solid rgba(236,231,221,.07);padding:12px 18px;border-radius:18px 18px 4px 18px;font-size:15px;line-height:1.55;color:#e4dfd4;margin:20px 0 8px;white-space:pre-wrap">{{ m.text }}</div>
+          </sc-if>
+          <sc-if value="{{ m.isArchi }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:8px 0 6px;color:#ded8cc">{{ m.node }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:6px;align-items:center;margin:22px 0;height:12px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#9c958a;animation:ttaPulse 1.2s infinite"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#9c958a;animation:ttaPulse 1.2s infinite .2s"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#9c958a;animation:ttaPulse 1.2s infinite .4s"></span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasFollowups }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:14px 0 10px;display:flex;flex-direction:column;gap:10px;animation:ttaFadeUp .4s ease both">
+          <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#8a8478">You might also want to ask</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ followups }}" as="f" hint-placeholder-count="3">
+              <button onClick="{{ f.ask }}" style="background:none;border:1px solid rgba(236,231,221,.16);border-radius:999px;padding:8px 14px;color:#c9c2b4;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;line-height:1.4;transition:border-color .18s,color .18s" style-hover="border-color:rgba(236,231,221,.4);color:#ece7dd">{{ f.q }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <div style="height:28px"></div>
+    </div>
+  </div>
+  <div style="padding:12px 24px 20px">
+    <div style="max-width:680px;margin:0 auto;position:relative">
+      <input value="{{ inputVal }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="Ask Archi anything..." style="width:100%;background:#1c1a17;border:1px solid rgba(236,231,221,.14);border-radius:16px;padding:16px 60px 16px 20px;font-size:15px;color:#ece7dd;outline:none;transition:border-color .18s" style-focus="border-color:rgba(236,231,221,.34)">
+      <button onClick="{{ sendClick }}" aria-label="Send" style="position:absolute;right:9px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:#ece7dd;color:#131210;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#ffffff">↑</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;model&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;claude-sonnet-4-5&quot;,&quot;claude-haiku-4-5&quot;],&quot;default&quot;:&quot;claude-sonnet-4-5&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;AI&quot;},&quot;typingSpeed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:5,&quot;min&quot;:1,&quot;max&quot;:10,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;AI&quot;}}">
+class Component extends DCLogic {
+  state = { view: 'landing', leaving: false, input: '', msgs: [], busy: false, typingText: null, followups: [], interview: false };
+
+  constructor(props) {
+    super(props);
+    this.scrollEl = null;
+    this.setScroll = (el) => { this.scrollEl = el; };
+    this.timer = null;
+    this.prevLen = 0;
+    this.PROMPTS = [
+      'Tell me about yourself',
+      'Show me your best work',
+      'Why OpenAI?',
+      'Tell me about the INME App',
+      'Explain MyQuest',
+      'Show your creative work',
+      'What have you learned from theatre?',
+      'How do you think about Product Marketing?',
+      'Convince me to interview you',
+    ];
+  }
+
+  componentDidMount() {
+    this.personaP = import('./knowledge/persona.js');
+    try {
+      const saved = JSON.parse(localStorage.getItem('tta-state-v1') || 'null');
+      if (saved && saved.msgs && saved.msgs.length) {
+        this.setState({ msgs: saved.msgs, followups: saved.followups || [], interview: !!saved.interview, view: 'chat' });
+      }
+    } catch (e) {}
+  }
+
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  persist() {
+    try {
+      localStorage.setItem('tta-state-v1', JSON.stringify({ msgs: this.state.msgs, followups: this.state.followups, interview: this.state.interview }));
+    } catch (e) {}
+  }
+
+  componentDidUpdate() {
+    const el = this.scrollEl;
+    if (!el) return;
+    const grew = this.state.msgs.length !== this.prevLen;
+    this.prevLen = this.state.msgs.length;
+    if (this.state.busy || this.state.typingText != null || grew) el.scrollTop = el.scrollHeight;
+  }
+
+  goChat() {
+    if (this.state.view === 'landing' && !this.state.leaving) {
+      this.setState({ leaving: true });
+      setTimeout(() => this.setState({ view: 'chat', leaving: false }), 480);
+    }
+  }
+
+  send(text) {
+    const t = (text != null ? text : this.state.input).trim();
+    if (!t || this.state.busy) return;
+    this.setState({ input: '' });
+    if (t[0] === '/') return this.handleCommand(t);
+    this.ask(t, this.state.interview ? 'interview' : null);
+  }
+
+  handleCommand(t) {
+    const cmd = t.toLowerCase().split(/\s/)[0];
+    if (cmd === '/resume') {
+      const a = document.createElement('a');
+      a.href = 'Archishman-Choudhury-Resume.pdf';
+      a.download = 'Archishman-Choudhury-Resume.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      this.pushLocal(t,
+        "There it goes — downloading now. That's the two-page version of me.\n\nThough between us: the PDF is the trailer, this conversation is the film. Pick any bullet point on it and I'll tell you what actually happened behind it.",
+        ["What's the story behind the 2.8x ROAS at INME?", 'What did I-PAC teach you about scale?', 'What have you learned from theatre?']);
+      return;
+    }
+    this.personaP.then((P) => {
+      const q = P.EGGS[cmd];
+      if (q) this.ask(q, this.state.interview ? 'interview' : null, t);
+      else this.pushLocal(t,
+        "Hm, that's not a door I've built yet. The ones that open: `/music` `/theatre` `/product` `/marketing` `/timeline` `/why-openai` — or `/resume` for the PDF.",
+        ['Tell me about yourself', 'Show me your best work', 'Convince me to interview you']);
+    });
+  }
+
+  pushLocal(userText, reply, followups) {
+    this.goChat();
+    const msgs = this.state.msgs.concat([{ role: 'user', text: userText }, { role: 'assistant', text: reply }]);
+    this.setState({ msgs, followups: followups || [], busy: false, typingText: null }, () => this.persist());
+  }
+
+  ask(prompt, mode, displayText) {
+    this.goChat();
+    const shown = displayText || prompt;
+    const msgs = this.state.msgs.concat([{ role: 'user', text: shown }]);
+    this.setState({ msgs, busy: true, followups: [] }, () => this.persist());
+    (async () => {
+      try {
+        const P = await this.personaP;
+        const history = msgs.slice(-14).map((m) => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
+        history[history.length - 1] = { role: 'user', content: prompt };
+        const raw = await window.claude.complete({
+          model: this.props.model ?? 'claude-sonnet-4-5',
+          max_tokens: 1500,
+          system: P.buildSystem(mode),
+          messages: history,
+        });
+        const parsed = this.parseFollowups(raw);
+        this.typeOut(parsed.body, parsed.followups);
+      } catch (e) {
+        const msgs2 = this.state.msgs.concat([{ role: 'assistant', text: "Hm — I lost my train of thought there (a connection hiccup on my end, not yours). Mind asking that again?" }]);
+        this.setState({ msgs: msgs2, busy: false, typingText: null }, () => this.persist());
+      }
+    })();
+  }
+
+  parseFollowups(raw) {
+    const parts = raw.split(/\n\s*FOLLOWUPS:\s*\n/i);
+    const body = parts[0].replace(/\n+-{3,}\s*$/, '').trim();
+    let followups = [];
+    if (parts[1]) {
+      followups = parts[1].split('\n')
+        .map((l) => { const x = l.match(/^\s*\d+[.)]\s*(.+)/); return x ? x[1].trim() : null; })
+        .filter(Boolean).slice(0, 3);
+    }
+    return { body, followups };
+  }
+
+  typeOut(full, followups) {
+    clearInterval(this.timer);
+    let i = 0;
+    const speed = Number(this.props.typingSpeed ?? 5);
+    const step = Math.max(2, Math.round(speed * 2.4));
+    this.setState({ typingText: '' });
+    this.timer = setInterval(() => {
+      i += step;
+      if (i >= full.length) {
+        clearInterval(this.timer);
+        const msgs = this.state.msgs.concat([{ role: 'assistant', text: full }]);
+        this.setState({ msgs, typingText: null, busy: false, followups }, () => this.persist());
+      } else {
+        this.setState({ typingText: full.slice(0, i) });
+      }
+    }, 28);
+  }
+
+  newChat() {
+    clearInterval(this.timer);
+    this.setState({ msgs: [], followups: [], busy: false, typingText: null, view: 'landing', leaving: false, input: '' }, () => this.persist());
+  }
+
+  mdStyles() {
+    return {
+      p: 'margin:0 0 14px;line-height:1.68;font-size:16px;',
+      h3: 'margin:24px 0 10px;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#9c958a;',
+      ul: 'margin:0 0 16px;padding-left:22px;',
+      li: 'margin:0 0 7px;line-height:1.62;font-size:16px;',
+      bq: "margin:18px 0;padding:2px 0 2px 18px;border-left:2px solid rgba(236,231,221,.25);font-family:'Newsreader',serif;font-style:italic;font-size:17.5px;line-height:1.6;color:#c9c2b4;",
+      strong: 'font-weight:600;color:#fdf8ee;',
+      code: 'font-family:ui-monospace,Menlo,monospace;font-size:.88em;background:rgba(236,231,221,.08);padding:2px 6px;border-radius:5px;',
+      hr: 'border:none;border-top:1px solid rgba(236,231,221,.12);margin:20px 0;',
+      a: 'color:#ece7dd;text-decoration:underline;text-underline-offset:3px;',
+    };
+  }
+
+  md(src) {
+    const S = this.mdStyles();
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const inline = (s) => {
+      s = esc(s);
+      s = s.replace(/`([^`]+)`/g, '<code style="' + S.code + '">$1</code>');
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong style="' + S.strong + '">$1</strong>');
+      s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      s = s.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" style="' + S.a + '">$1</a>');
+      return s;
+    };
+    const lines = src.split('\n');
+    let out = '';
+    let list = null;
+    const closeList = () => { if (list) { out += list === 'ul' ? '</ul>' : '</ol>'; list = null; } };
+    for (const raw of lines) {
+      let m;
+      if (/^\s*$/.test(raw)) { closeList(); continue; }
+      if ((m = raw.match(/^#{1,4}\s+(.+)/))) { closeList(); out += '<h3 style="' + S.h3 + '">' + inline(m[1]) + '</h3>'; }
+      else if (/^\s*(-{3,}|\*{3,})\s*$/.test(raw)) { closeList(); out += '<hr style="' + S.hr + '">'; }
+      else if ((m = raw.match(/^\s*[-•*]\s+(.+)/))) {
+        if (list !== 'ul') { closeList(); out += '<ul style="' + S.ul + '">'; list = 'ul'; }
+        out += '<li style="' + S.li + '">' + inline(m[1]) + '</li>';
+      }
+      else if ((m = raw.match(/^\s*\d+[.)]\s+(.+)/))) {
+        if (list !== 'ol') { closeList(); out += '<ol style="' + S.ul + '">'; list = 'ol'; }
+        out += '<li style="' + S.li + '">' + inline(m[1]) + '</li>';
+      }
+      else if ((m = raw.match(/^>\s?(.*)/))) { closeList(); out += '<blockquote style="' + S.bq + '">' + inline(m[1]) + '</blockquote>'; }
+      else { closeList(); out += '<p style="' + S.p + '">' + inline(raw) + '</p>'; }
+    }
+    closeList();
+    return out;
+  }
+
+  mdNode(text, typing) {
+    const cursor = typing ? '<span style="display:inline-block;width:8px;height:17px;background:#ece7dd;margin-left:3px;vertical-align:-2px;animation:ttaBlink 1s steps(1) infinite"></span>' : '';
+    return React.createElement('div', { dangerouslySetInnerHTML: { __html: this.md(text) + cursor } });
+  }
+
+  renderVals() {
+    const st = this.state;
+    const msgs = st.msgs.map((m, i) => ({
+      key: i,
+      isUser: m.role === 'user',
+      isArchi: m.role !== 'user',
+      text: m.text,
+      node: m.role !== 'user' ? this.mdNode(m.text, false) : null,
+    }));
+    if (st.typingText != null) {
+      msgs.push({ key: 'typing', isUser: false, isArchi: true, text: '', node: this.mdNode(st.typingText, true) });
+    }
+    const followups = st.followups.map((q) => ({ q, ask: () => this.send(q) }));
+    return {
+      showLanding: st.view === 'landing',
+      showChat: st.view === 'chat',
+      landingOpacity: st.leaving ? 0 : 1,
+      landingShift: st.leaving ? -20 : 0,
+      msgs,
+      prompts: this.PROMPTS.map((label) => ({ label, ask: () => this.send(label) })),
+      followups,
+      hasFollowups: followups.length > 0 && !st.busy,
+      thinking: st.busy && st.typingText == null,
+      inputVal: st.input,
+      onInput: (e) => this.setState({ input: e.target.value }),
+      onKey: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
+      sendClick: () => this.send(),
+      interviewLabel: st.interview ? 'Interview mode · on' : 'Interview mode',
+      interviewDot: st.interview ? '#ece7dd' : 'rgba(236,231,221,.22)',
+      toggleInterview: () => this.setState({ interview: !st.interview }, () => this.persist()),
+      recruiter: () => this.ask('Should we interview Archi? Give me the honest brief.', 'recruiter', 'Should we interview Archi?'),
+      newChat: () => this.newChat(),
+      setScroll: this.setScroll,
+    };
+  }
+}
+</script>
+</body>
+</html>
